@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\IntegrationRepositoryInterface;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 
 class IntegrationController extends Controller 
 {
@@ -25,12 +28,13 @@ class IntegrationController extends Controller
 
     public function store(Request $request): JsonResponse 
     {
-        $integrationDetails = $request->only([
-            'marketplace',
-            'name',
-            'email',
-            'password'
-        ]);
+        if($request->marketplace == "n11" || $request->marketplace == "trendyol"){
+            $integrationDetails = array(
+                'marketplace' => $request->marketplace,
+                'username' => $request->username,
+                'password' => Hash::make($request->password)
+            );
+        }else throw new Exception("Marketplace must be n11 or trendyol!");
 
         return response()->json(
             [

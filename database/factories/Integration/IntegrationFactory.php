@@ -18,8 +18,7 @@ class IntegrationFactory extends Factory
     {
         return [
             'marketplace' => $this->faker->sentences(4, true),
-            'name' => $this->faker->name(),
-            'email' => $this->faker->email(),
+            'usernam' => $this->faker->username(),
             'password' => $this->faker->password(),
         ];
     }

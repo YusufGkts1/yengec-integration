@@ -24,7 +24,7 @@ class IntegrationRepository implements IntegrationRepositoryInterface
 
     public function createIntegration(array $integrationDetails) 
     {
-        return Integration::create($integrationDetails);
+        return (new Integration)->create($integrationDetails);
     }
 
     public function updateIntegration($integrationId, array $newDetails) 

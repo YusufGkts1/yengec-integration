@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('integrations', function (Blueprint $table) {
             $table->id();
             $table->string('marketplace');
-            $table->string('name');
-            $table->string('email')->uniqe();
+            $table->string('username');
             $table->string('password');
             $table->timestamps();
         });
