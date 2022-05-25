@@ -2,85 +2,71 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Integration\Integration;
-use App\Http\Requests\StoreIntegrationRequest;
-use App\Http\Requests\UpdateIntegrationRequest;
+use App\Interfaces\IntegrationRepositoryInterface;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-class IntegrationController extends Controller
+class IntegrationController extends Controller 
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    private IntegrationRepositoryInterface $integrationRepository;
+
+    public function __construct(IntegrationRepositoryInterface $integrationRepository) 
     {
-        //
+        $this->integrationRepository = $integrationRepository;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function index(): JsonResponse 
     {
-        //
+        return response()->json([
+            'data' => $this->integrationRepository->fetchIntegrations()
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreIntegrationRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreIntegrationRequest $request)
+    public function store(Request $request): JsonResponse 
     {
-        //
+        $integrationDetails = $request->only([
+            'marketplace',
+            'name',
+            'email',
+            'password'
+        ]);
+
+        return response()->json(
+            [
+                'data' => $this->integrationRepository->createIntegration($integrationDetails)
+            ],
+            Response::HTTP_CREATED
+        );
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Integration\Integration  $integration
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Integration $integration)
+    public function show(Request $request): JsonResponse 
     {
-        //
+        $integrationId = $request->route('id');
+
+        return response()->json([
+            'data' => $this->integrationRepository->getIntegrationById($integrationId)
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Integration\Integration  $integration
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Integration $integration)
+    public function update(Request $request): JsonResponse 
     {
-        //
+        $integrationId = $request->route('id');
+        $integrationDetails = $request->only([
+            'client',
+            'details'
+        ]);
+
+        return response()->json([
+            'data' => $this->integrationRepository->updateIntegration($integrationId, $integrationDetails)
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateIntegrationRequest  $request
-     * @param  \App\Models\Integration\Integration  $integration
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateIntegrationRequest $request, Integration $integration)
+    public function destroy(Request $request): JsonResponse 
     {
-        //
-    }
+        $integrationId = $request->route('id');
+        $this->integrationRepository->deleteIntegration($integrationId);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Integration\Integration  $integration
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Integration $integration)
-    {
-        //
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

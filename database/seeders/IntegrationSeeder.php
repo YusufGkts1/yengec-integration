@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Integration\Integration;
 use Illuminate\Database\Seeder;
 
 class IntegrationSeeder extends Seeder
@@ -14,6 +14,8 @@ class IntegrationSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Integration::factory()->times(10)->create();
+
     }
+ 
 }

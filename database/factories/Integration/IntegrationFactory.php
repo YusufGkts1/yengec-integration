@@ -17,7 +17,10 @@ class IntegrationFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'marketplace' => $this->faker->sentences(4, true),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->email(),
+            'password' => $this->faker->password(),
         ];
     }
 }
