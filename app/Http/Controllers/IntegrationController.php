@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\IntegrationRepositoryInterface;
+use App\Models\Integration\Integration;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
 class IntegrationController extends Controller 
@@ -22,23 +22,26 @@ class IntegrationController extends Controller
     public function index(): JsonResponse 
     {
         return response()->json([
-            'data' => $this->integrationRepository->fetchIntegrations()
+            'status' =>  '200',
+            'data' => $this->integrationRepository->fetchIntegrations(),
+            'message' => 'Integrations OK'
         ]);
     }
 
     public function store(Request $request): JsonResponse 
     {
         if($request->marketplace == "n11" || $request->marketplace == "trendyol"){
-            $integrationDetails = array(
-                'marketplace' => $request->marketplace,
-                'username' => $request->username,
-                'password' => Hash::make($request->password)
-            );
+            $integrationDetails = $request->only([ 
+                'marketplace',
+                'username',
+                'password']);
         }else throw new Exception("Marketplace must be n11 or trendyol!");
 
         return response()->json(
             [
-                'data' => $this->integrationRepository->createIntegration($integrationDetails)
+                'status' => '200',
+                'data' => $this->integrationRepository->createIntegration($integrationDetails),
+                'message' => 'Integration created'
             ],
             Response::HTTP_CREATED
         );
@@ -73,4 +76,8 @@ class IntegrationController extends Controller
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
-}
+}// $integrationDetails = array(
+            //     'marketplace' => $request->marketplace,
+            //     'username' => $request->username,
+            //     'password' => Hash::make($request->password)
+            // );

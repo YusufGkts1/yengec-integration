@@ -2,6 +2,8 @@
 
 namespace App\Interfaces;
 
+use App\Models\Integration\Integration;
+
 interface IntegrationRepositoryInterface 
 {
     public function fetchIntegrations();

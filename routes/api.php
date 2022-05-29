@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IntegrationController;
+use App\Http\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,5 @@ Route::get('integrations/{id}', [IntegrationController::class, 'show']);
 Route::post('integrations', [IntegrationController::class, 'store']);
 Route::put('integrations/{id}', [IntegrationController::class, 'update']);
 Route::delete('integrations/{id}', [IntegrationController::class, 'delete']);
+
+Route::post('register', [RegisterController::class, 'store']);
